@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.kgc.smbms.mapper.SmbmsBillMapper">
+
+
+    <resultMap id="sbMap" type="SmbmsBill" autoMapping="true">
+        <id column="id" property="id"></id>
+        <association property="smbmsProvider" javaType="SmbmsProvider" resultMap="pMap"></association>
+    </resultMap>
+    <resultMap id="pMap" type="SmbmsProvider" autoMapping="true">
+        <id column="id" property="id"></id>
+    </resultMap>
+    <select id="queryAllSmbmsBill"  resultMap="sbMap" parameterType="SmbmsBill">
+        SELECT * FROM `smbms_bill` s, `smbms_provider` p
+        <where>
+            s.`providerId`=p.id
+            <if test="sb.productName!=null and sb.productName!=''"> and s.productName like concat('%',#{sb.productName},'%')</if>
+            <if test="sb.smbmsProvider.id!=null and sb.smbmsProvider.id!='00'"> and s.providerId=#{sb.smbmsProvider.id}</if>
+            <if test="sb.isPayment!=null and sb.isPayment!='00'"> and s.isPayment=#{sb.isPayment}</if>
+        </where>
+        order by s.id desc
+
+
+    </select>
+</mapper>

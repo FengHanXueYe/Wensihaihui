@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>listSmbmsBill</title>
+</head>
+<body>
+
+<center>
+    <form action="queriAllSmbmsBill" method="get">
+        <p>供应商：
+            <select name="smbmsProvider.id" >
+                <option th:value="00">--请选择--</option>
+                <span th:each="item : ${listSmbmsProvider}" th:object="${item}">
+                    <option th:value="*{id}" th:text="*{proName}"></option>
+                </span>
+            </select>
+            商品名称：<input type="text" name="productName" id="">
+            是否支付：<select name="isPayment" id="">
+                <option value="00">--请选择--</option>
+                <option value="2">已支付</option>
+                <option value="1">未支付</option>
+            </select>
+            <input type="submit" value="查询">
+        </p>
+        <table border="1" width="60%">
+            <tr align="center">
+                <th>交易id</th>
+                <th>交易编号</th>
+                <th>商品名称</th>
+                <th>商品数量</th>
+                <th>商品单位</th>
+                <th>交易总金额</th>
+                <th>是否已支付</th>
+                <th>供应商名称</th>
+                <th>操作</th>
+            </tr>
+            <tr th:each="item : ${listSmbmsBill.list}" th:object="${item}">
+                <td th:text="*{id}"></td>
+                <td th:text="*{billCode}"></td>
+                <td th:text="*{productName}"></td>
+                <td th:text="*{productCount}"></td>
+                <td th:text="*{productUnit}"></td>
+                <td th:text="*{totalPrice}"></td>
+                <td th:text="已支付" th:if="${item.isPayment==2}"></td>
+                <td th:text="未支付" th:if="${item.isPayment==1}"></td>
+                <td th:text="*{smbmsProvider.proName}"></td>
+                <td></td>
+            </tr>
+        </table>
+        <p>
+            共 <span th:text="${listSmbmsBill.total}"></span>条数据 [<span th:text="${listSmbmsBill.pageNum}"></span>/<span th:text="${listSmbmsBill.pages}"></span>]
+            <input type="button" class="fenye" th:no="1" value="首页">
+            <input type="button" class="fenye" th:no="${listSmbmsBill.prePage}" value="上一页">
+            <input type="button" class="fenye" th:no="${listSmbmsBill.pageNum+1}" value="下一页">
+            <input type="button" class="fenye" th:no="${listSmbmsBill.pages}" value="尾页">
+            <input type="hidden" name="haha" th:value="${listSmbmsBill.pages}">
+        </p>
+
+    </form>
+
+</center>
+<script th:src="@{/js/jquery-2.1.4.min.js}"></script>
+<script th:inline="javascript">
+    $(function () {
+
+        var bb = [[${smbmsBill.productName}]]
+        var aa = [[${smbmsBill.smbmsProvider.id}]]
+        var cc = [[${smbmsBill.isPayment}]]
+        //alert("smbmsBill.productName>>"+bb+"smbmsBill.smbmsProvider.id>>"+aa+"smbmsBill.isPayment>>"+cc);
+        if(aa!="00" && aa!=null){
+            $("select[name='smbmsProvider.id']").val(aa);
+        }
+        if(bb!="" && bb!=null){
+            $("input[name='productName']").val(bb);
+        }
+        if(cc!="00" && cc!=null){
+            $("select[name='isPayment']").val(cc);
+        }
+        // var gys = $("select[name='smbmsProvider.id']").val();
+        // var spm = $("input[name='productName']").val();
+        // var zt = $("select[name='isPayment']").val();
+
+
+        $(".fenye").click(function () {
+            var pageNum = $(this).attr("no");
+            if(pageNum<=0){
+                pageNum = 1;
+            }
+            var zong = $("input[name='haha']").val();
+            if(pageNum>=zong){
+                pageNum = zong
+            }
+            // var gys = $("select[name='smbmsProvider.id']").val();
+            // var spm = $("input[name='productName']").val();
+            // var zt = $("select[name='isPayment']").val();
+            var data = $("form").serialize()
+            //alert(data)
+            location.href="queriAllSmbmsBill?pageNum="+pageNum+"&"+data;
+
+
+
+        })
+        
+    })
+    
+</script>
+</body>
+</html>
