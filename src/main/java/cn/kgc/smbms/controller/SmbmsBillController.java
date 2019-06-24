@@ -17,6 +17,8 @@ public class SmbmsBillController {
     @Resource
     private SmbmsBillService smbmsBillService;
 
+    // lalalalal
+
     @RequestMapping(value = "queriAllSmbmsBill", method = RequestMethod.GET)
     public String queriAllSmbmsBill(SmbmsBill smbmsBill, Integer pageNum, Integer pageSize, Model model){
         System.out.println(">>>>>>>>>>>"+smbmsBill);
